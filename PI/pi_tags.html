@@ -1,0 +1,40 @@
+<h1>Tags</h1>
+
+<form onsubmit="salvar(event)">
+    <p>Tags</p>
+    <select class="inputTags" required>
+        <option value="">Selecione uma Tag</option>
+        <option value="✔">✔</option>
+        <option value="❌">❌</option>
+        <option value="🚶‍♀️">🚶‍♀️</option>
+    </select>
+    <hr/>
+
+    <button type="salvar">Salvar</button>
+    <button type="reset">Cancelar</button>    
+</form>
+
+<hr/>
+
+<h2>Listagem</h2>
+
+<table class="tabelaListagem" border>
+    <tr>
+        <td> <strong>Tags</strong> </td>
+    </tr>
+</table>
+
+<!-- ###### Script ###### -->
+
+<script>
+    function salvar(e){
+        e.preventDefault()
+        let tags = document.querySelector(".inputTags").value
+        let conteudo = `
+            <tr>
+                <td>${tags}</td>
+            </tr>
+            `
+            document.querySelector(".tabelaListagem").innerHTML += conteudo
+    }
+</script>

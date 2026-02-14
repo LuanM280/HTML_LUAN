@@ -1,0 +1,23 @@
+body{
+    text-align: center; /* comentarias */
+    background-color: blue;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+}
+
+
+h1{
+    color: red;
+    background-color: black;
+    text-align: center;
+}
+
+
+p{
+    color: white; 
+    background-color: black;
+}
+
+.textoDestaque{
+    color: aqua;
+}

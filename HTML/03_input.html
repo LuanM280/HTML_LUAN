@@ -1,0 +1,32 @@
+<h1>Inputs</h1>
+<p>Como criar pontos de interação com o usuário</p>
+<h/>
+
+<form onsubmit="salvar()">
+    
+    <p>Digite seu nome:</p> 
+    <input minlength="3" class="inputNome" required/>
+    
+    <p>Digite sua senha:</p> 
+    <input type="password" class="inputSenha" required/>
+    <br/>
+    <br/>
+    <button>Salvar</button>
+
+</form>
+
+
+
+<script>
+    function salvar(){
+        let nome = document.querySelector(".inputNome").value
+        alert("Seja bem-vindo(a), "+nome)
+        
+        let senha = document.querySelector(".inputSenha").value
+        if(senha == "123"){
+            alert("Logado com sucesso!")
+        } else {
+            alert("Senha incorreta...")
+        }
+    }
+</script>

@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
+
+body{
+    font-family: "Noto Sans JP", sans-serif;
+    color:#05008f;
+    background-color: #d4d4d6;
+    margin: 50px;
+}
+
+.menuSuperior{
+    background-color: #FFF;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 1px 2px 3px blueviolet;
+
+    /* ESPAÇAMENTOS */
+    margin: 0PX 0px 20px 0px; /* Espaçamento por FORA */ 
+    padding: 50px; /* Espaço por DENTRO */
+}
+
+.menuSuperiorBotao{
+    background-color: #007BFF;
+    color: #FFF;
+    text-decoration: none;
+    padding: 3px 10px; /* 1° px cima e baixo, 2° os lados */
+    margin: 20px;
+    border-radius: 50px;
+     box-shadow: 1px 2px 3px #CCC
+}
+
+.menuSuperiorBotao:hover{
+    background-color: #1960ad;
+    transition: 0.3s;
+}
+
+.card{
+    background-color: #FFF;
+    border-radius: 10px;
+    width: 30%;
+    text-align: center;
+    padding: 20px;
+}
+
+.cardBotao{
+    background-color:none;
+    width: 50%; /* width modifica a largura */
+}

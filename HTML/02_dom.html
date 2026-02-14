@@ -1,0 +1,32 @@
+<h1>DOM</h1>
+<p>Manipular HTML usando Javasript</p>
+
+<hr/>
+
+<p class="textoMemsagem" >Aqui aparrecerá uma mensagem</p>
+<button onclick="trocarMenssagem()">Trocar mensagem</button>
+
+<hr/>
+
+<p class="QuenteFrio"></p>
+<button onclick="quente()">🔥</button>
+<button onclick="frio()">❄</button>
+
+<script>
+    function trocarMenssagem(){
+        let mensagem = " Acredite nos seus sonhos!💖"
+        document.querySelector(".textoMemsagem").innerHTML += mensagem
+    }
+
+    function quente(){
+        let mensagemQuente = "Está 🥵"
+        document.querySelector(".QuenteFrio").innerHTML = mensagemQuente
+    }
+
+    function frio(){
+
+        let mesagemFrio = "Está 🥶"
+        document.querySelector(".QuenteFrio").innerHTML = mesagemFrio
+    }
+    
+</script>

@@ -1,0 +1,33 @@
+<h>Funções!</h>
+<p>Como criar funções em Javasript e misturar com HTML</p>
+<button onclick="mostrarMensagem()">Mostrar mensagem</button>
+<button onclick="mostrarSalario()"">Mostrar salário</button>
+<button onclick="outrarMensagem()">Mostrar outra mensagem</button>
+
+<script>
+    function mostrarMensagem (){
+        let nome = "Yuki";
+        alert("Seje bem-vindi,"+nome)
+
+    }
+
+    function mostrarSalario(){
+        let salario = 1500
+        let bonus = 200
+        let INSS = 30
+        let total = salario+bonus
+        let totalreal = total-INSS
+        alert("O salário é $"+salario+" e o bonus $"+bonus+"\nPorém será descontado $"+INSS+" do INSS\n\nTotal a receber $"+totalreal)
+    }
+
+    function outrarMensagem(){
+        let nome = prompt("Digite o seu nome:")
+        if(nome == null || nome == "" || nome.length <= 2){
+            alert("É preciso digitar um nome e ele precisa ter mais ou 3 carácteres")
+            outrarMensagem()
+            return
+        }
+        alert("Seja bem-vindo(a), "+nome)
+    }
+
+</script>

@@ -1,0 +1,68 @@
+<h1>Genrenciador de Usuários</h1>
+<p>Encontre os usuários cadastrados, crie um novo, altere ou remova. </p>
+
+<hr/>
+
+<h2>Cadastrar</h2>
+<!-- input value="Luan Mattos" já a escrita salva -->
+
+<form onsubmit="salvar(event)">
+    <label>
+        Nome
+        <input class="inputNome" placeholder="Digite seu nome..."/>
+    </label>
+    
+    <br/><br/>
+
+    <label>
+        E-mail
+        <input class="inputEmail" placeholder="Digite seu e-mail.."/>
+    </label>
+
+    <br/><br/>
+
+    <label>
+        Senha
+        <input class="inputSenha" placeholder="Digite sua senha..." type="password" />
+    </label>
+
+    <br/><br/>
+
+    <button type="submit">Salvar</button>
+    <button type="reset">Cancelar</button>
+</form>
+
+<hr/>
+
+<h2>Listagem</h2>
+
+<table class="tabelaListagem" border>
+    <tr>
+        <td> <strong>Nome</strong> </td>
+        <td> <strong>Email</strong> </td>
+        <td> <strong>Senha</strong> </td>
+    </tr>
+</table>
+
+<!-- ########## SCRIPT ########## -->
+
+<script>
+        function salvar(e){
+            e.preventDefault()
+            let nome = document.querySelector(".inputNome").value
+            let email = document.querySelector(".inputEmail").value
+            let senha = document.querySelector(".inputSenha").value
+
+            //INTERPOLAÇÃO //
+            // alert(`Nome: ${nome}\nEmail: ${email}\nsenha: ${senha}`) //
+
+            let conteudo = `
+            <tr>
+                <td>${nome}</td>
+                <td>${email}</td>
+                <td>${senha}</td>
+            </tr>
+            `
+            document.querySelector(".tabelaListagem").innerHTML += conteudo
+        }
+</script>

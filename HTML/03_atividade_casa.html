@@ -1,0 +1,76 @@
+<h1>Atividade_03</h1>
+
+<Form onsubmit="cadastrar()">
+    <p>Nome completo:</p>
+    <input minlength="10" class="inputNome" required/>
+
+    <p>E-mail:</p>
+    <input type="email" class="inputEmail" required/>
+
+    <p>Idade:</p>
+    <input type="number" class="inputIdade" required/>
+
+    <p>Data de nacimento</p>
+    <input type="date" class="inputData" required/>
+
+    <p>Telefone</p>
+    <input type="tel" class="inputTelefone" required/>
+
+    <p>Estado</p>
+    <select class="inputEstado" required>
+  <option value="">Selecione um estado</option>
+  <option value="AC">Acre</option>
+  <option value="AL">Alagoas</option>
+  <option value="AP">Amapá</option>
+  <option value="AM">Amazonas</option>
+  <option value="BA">Bahia</option>
+  <option value="CE">Ceará</option>
+  <option value="DF">Distrito Federal</option>
+  <option value="ES">Espírito Santo</option>
+  <option value="GO">Goiás</option>
+  <option value="MA">Maranhão</option>
+  <option value="MT">Mato Grosso</option>
+  <option value="MS">Mato Grosso do Sul</option>
+  <option value="MG">Minas Gerais</option>
+  <option value="PA">Pará</option>
+  <option value="PB">Paraíba</option>
+  <option value="PR">Paraná</option>
+  <option value="PE">Pernambuco</option>
+  <option value="PI">Piauí</option>
+  <option value="RJ">Rio de Janeiro</option>
+  <option value="RN">Rio Grande do Norte</option>
+  <option value="RS">Rio Grande do Sul</option>
+  <option value="RO">Rondônia</option>
+  <option value="RR">Roraima</option>
+  <option value="SC">Santa Catarina</option>
+  <option value="SP">São Paulo</option>
+  <option value="SE">Sergipe</option>
+  <option value="TO">Tocantins</option>
+</select>
+
+<p>Observações</p>
+<textarea rows="4" cols="40" placeholder="Digite aqui suas observações..."></textarea>
+
+<hr/>
+<button type="submit">Cadastrar</button>
+</Form>
+
+<script>
+    function cadastrar(){
+        let nome = document.querySelector(".inputNome").value
+        let email = document.querySelector(".inputEmail").value
+        let idade = document.querySelector(".inputIdade").value 
+        let data = document.querySelector(".inputData").value 
+        let telefone = document.querySelector(".inputTelefone").value 
+        let estado = document.querySelector(".inputEstado").value
+        alert(
+      "Dados cadastrados:\n\n" +
+      "Nome: " + nome + "\n" +
+      "Email: " + email + "\n" +
+      "Idade: " + idade + "\n" +
+      "Data de nascimento: " + data + "\n" +
+      "Telefone: " + telefone + "\n" +
+      "Estado: " + estado + "\n"
+    )
+    }
+</script>

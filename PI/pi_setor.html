@@ -1,0 +1,41 @@
+<h1>SETORES</h1>
+
+<form onsubmit="salvar(event)">
+    <p>Setores</p>
+    <select class="inputSetores" required>
+        <option value="">Selecione um Setor</option>
+        <option value="A">Setor A</option>
+        <option value="B">Setor B</option>
+        <option value="C">Setor C</option>
+    </select>
+    <hr/>
+
+    <button type="salvar">Salvar</button>
+    <button type="reset">Cancelar</button>
+</form>
+
+<hr/>
+
+<h2>Listagem</h2>
+
+<table class="tabelaListagem" border>
+    <tr>
+        <td> <strong>Setores</strong> </td>
+    </tr>
+</table>
+
+<!-- ###### Script ###### -->
+
+<script>
+    function salvar(e){
+        e.preventDefault()
+        let setor = document.querySelector(".inputSetores").value
+        let conteudo = `
+            <tr>
+                <td>${setor}</td>
+            </tr>
+            `
+            document.querySelector(".tabelaListagem").innerHTML += conteudo
+    }
+        // alert( "Setores Selevionados:\n\n"+setor+tag+"\n" //
+</script>

@@ -1,0 +1,20 @@
+<h1>Criar elementos</h1>
+<p>Criar HTML pelo Javasript</p>
+<hr/>
+
+<input class = "inputItem" placeholder="Digite um item..."/>
+<button onclick="criar()">Adicionar a lista</button>
+
+<ul class="listadeComprar">
+    <li>Pão</li>
+    <li>Manteiga</li>
+
+</ul>
+
+<script>
+    function criar(){
+        let item = document.querySelector(".inputItem").value
+        document.querySelector(".listadeComprar").innerHTML += "<li>"+item+"</li>"
+    }
+    
+</script>
