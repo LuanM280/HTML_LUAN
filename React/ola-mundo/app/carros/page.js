@@ -3,6 +3,8 @@ import { useState } from "react";
 
 function Carros() {
 
+    const [exibelistagem, alteraExibeListagem] = useState(true)
+
     const [nome, alteraNome] = useState("")
     const [marca, alteraMarca] = useState("")
     const [cor, alteraCor] = useState("")
@@ -85,7 +87,16 @@ function Carros() {
 
         //listaCarros.push(objeto)
         alteraListaCarros(listaCarros.concat(objeto))
-        
+
+        /* outro jeito de fazer os botões treu e false
+        // se for fazer desse jeit, precisa chamar no botão onClick={mostrsrListagem}
+        function mostrarListagem(){
+            alteraExibeListagem(true)
+        } 
+        function mostrarCadastro(){
+            alteraExibeListagem(false)
+        }
+        */
     }
 
     return (
@@ -93,50 +104,54 @@ function Carros() {
             <h1>Lista de Carros</h1>
             <hr />
 
-            <form onSubmit={salvar}>
+            <button onClick={()=> alteraExibeListagem (true)} className="btn btn-success mx-4">Listagem</button>
+            <button onClick={()=> alteraExibeListagem (false)} className="btn btn-primary">Cadastro</button>
 
-                <p>Digite o nome do carro:</p>
-                <input onChange={e => alteraNome(e.target.value)} />
+            {
+                exibelistagem == true ?
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Marca</th>
+                                <th scope="col">Cor</th>
+                                <th scope="col">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                listaCarros.map(
+                                    item =>
+                                        <tr>
+                                            <th scope="row"> {item.nome} </th>
+                                            <td> {item.marca} </td>
+                                            <td> {item.cor} </td>
+                                            <td> R$ {item.valor} </td>
+                                        </tr>
+                                )
+                            }
+                        </tbody>
+                    </table>
+                :
+                    <form onSubmit={salvar}>
 
-                <p>Digite a marca:</p>
-                <input onChange={e => alteraMarca(e.target.value)} />
+                        <p>Digite o nome do carro:</p>
+                        <input onChange={e => alteraNome(e.target.value)} />
 
-                <p>Digite o valor:</p>
-                <input onChange={e => alteraValor(e.target.value)} />
+                        <p>Digite a marca:</p>
+                        <input onChange={e => alteraMarca(e.target.value)} />
 
-                <p>Digite a cor:</p>
-                <input onChange={e => alteraCor(e.target.value)} />
+                        <p>Digite o valor:</p>
+                        <input onChange={e => alteraValor(e.target.value)} />
 
-                <br />
-                <button>Salvar</button>
+                        <p>Digite a cor:</p>
+                        <input onChange={e => alteraCor(e.target.value)} />
 
+                        <br />
+                        <button>Salvar</button>
 
-            </form>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Marca</th>
-                        <th scope="col">Cor</th>
-                        <th scope="col">Valor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        listaCarros.map(
-                            item =>
-                                <tr>
-                                    <th scope="row"> {item.nome} </th>
-                                    <td> {item.marca} </td>
-                                    <td> {item.cor} </td>
-                                    <td> R$ {item.valor} </td>
-                                </tr>
-                        )
-                    }
-                </tbody>
-            </table>
-
+                    </form>
+            }
         </div>
     );
 }
