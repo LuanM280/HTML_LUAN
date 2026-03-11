@@ -29,7 +29,7 @@ function Livros() {
             <ul>
                 {
                     livros.map(
-                        item => <li> Título: {item.nome} escrito por {item.escritor} </li>
+                        item => <li> Título: {item.nome} , escrito por {item.escritor} encontrado na {item.editora} por {item.preco} </li>
                     )
                 }
             </ul>
