@@ -1,7 +1,9 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Carros() {
+
+    const [autenticado, alteraAutenticado] = useState(false)
 
     const [exibelistagem, alteraExibeListagem] = useState(true)
 
@@ -99,13 +101,26 @@ function Carros() {
         */
     }
 
+    useEffect(() => {
+        const logado = localStorage.getItem("logado")
+        if (logado == "true") {
+            alteraAutenticado(true)
+        }
+    }, [])
+
     return (
         <div>
             <h1>Lista de Carros</h1>
             <hr />
 
-            <button onClick={()=> alteraExibeListagem (true)} className="btn btn-success mx-4">Listagem</button>
-            <button onClick={()=> alteraExibeListagem (false)} className="btn btn-primary">Cadastro</button>
+            <button onClick={() => alteraExibeListagem(true)} className="btn btn-success mx-4">Listagem</button>
+
+            {
+                autenticado == false ?
+                    <button onClick={() => alteraExibeListagem(false)} className="btn btn-primary">Cadastro</button>
+                :
+                    <div></div>
+            }
 
             {
                 exibelistagem == true ?
@@ -132,7 +147,7 @@ function Carros() {
                             }
                         </tbody>
                     </table>
-                :
+                    :
                     <form onSubmit={salvar}>
 
                         <p>Digite o nome do carro:</p>
