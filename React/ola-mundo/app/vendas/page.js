@@ -7,13 +7,20 @@ function Vendas() {
 
     const [listaVendas, alteraListaVendas] = useState([])
 
+    
+    const [id_ussuario,alteraUsuario] = useState()
+    const [id_livro,alteraLivro] = useState()
+    const [quantidadis,alteraQuantidadis] = useState()
+    const [pagamentos,alteraPagamentos] = useState()
+
+
     async function buscaTodos() {
         const { data, error } = await supabase
             .from('vendas')
             .select(`
                     *,
-                    id_ussuario (*),
-                    id_livro (*)
+                    id_ussuario(*),
+                    id_livro(*)
                 `)
 
         console.log(error)
@@ -53,6 +60,20 @@ function Vendas() {
         }
     }
 
+    async function salvar(e) {
+        e.preventDefault()
+
+        const objeto = {
+            id_ussuario: id_ussuario,
+            id_livro: id_livro,
+            quantidadis: quantidadis,
+            pagamentos: pagamentos
+        }
+
+        const {error} = await supabase.from('vendas').insert(objeto)
+        console.log(error)
+    }
+
     useEffect(() => {
         buscaTodos()
     }, [])
@@ -62,6 +83,33 @@ function Vendas() {
             <h1> Vendas </h1>
             <hr />
 
+            <form>
+                <p> Selecione o usuário </p>
+                <select onChange={e => alteraUsuario(e.target.value) } >
+                    {
+                        listaVendas.map(
+                            item => <option value={item.id_ussuario.id} > {item.id_ussuario.nome} </option>
+                        )
+                    }
+                </select>
+                <br/>
+
+                <p> DIgite o livro </p>
+                <input onChange={e => alteraLivro(e.target.value) } />
+                <br/>
+                
+                <p> DIgite quantidade </p>
+                <input onChange={e => alteraQuantidadis(e.target.value) } />
+                <br/>
+
+                <p> Forma de Pagamento </p>
+                <input onChange={e => alteraPagamentos(e.target.value) } />
+                <br/>
+
+                <button onClick={salvar}> Salvar </button>
+            </form>
+            
+            <hr/>
             <table className="table">
                 <tr>
                     <td> # </td>
