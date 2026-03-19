@@ -1,0 +1,8 @@
+table tr{
+    transition: o.3s;
+}
+
+table tr:hover{
+    background-color: rgb(185, 184, 184);
+    cursor: pointer;
+}

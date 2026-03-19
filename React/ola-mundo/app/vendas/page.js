@@ -1,18 +1,36 @@
 'use client'
 import { useEffect, useState } from "react";
 import supabase from "../conexao/supabase";
+import "./vendas.css"
 
 
 function Vendas() {
 
     const [listaVendas, alteraListaVendas] = useState([])
+    const [listaUsuarios, alteraListaUsuarios] = useState([])
+    const [listaLivros, alteraListaLivros] = useState([])
 
     
-    const [id_ussuario,alteraUsuario] = useState()
+    const [id_ussuario,alteraUsuarios] = useState()
     const [id_livro,alteraLivro] = useState()
     const [quantidadis,alteraQuantidadis] = useState()
     const [pagamentos,alteraPagamentos] = useState()
 
+    async function buscaLivros(){
+         const { data, error } = await supabase
+            .from('livros')
+            .select()
+
+        alteraListaLivros(data)
+    }
+
+    async function buscaUsuarios(){
+         const { data, error } = await supabase
+            .from('usuarios')
+            .select()
+
+        alteraListaUsuarios(data)
+    }
 
     async function buscaTodos() {
         const { data, error } = await supabase
@@ -30,6 +48,15 @@ function Vendas() {
         alteraListaVendas(data)
     }
 
+    async function excluir(id) {
+        const opcao = confirm("Tem certe que deseja exluir?")
+        if(opcao == false){
+            return
+        }
+
+        const response = await supabase.from('vendas').delete().eq('id',id)
+    }
+
     function formataData(data) {
         let data_formatada = new Date(data)
         data_formatada = data_formatada.toLocaleDateString()
@@ -44,19 +71,19 @@ function Vendas() {
 
     function formataPagamentos(pagamentos) {
         if (pagamentos == "pix") {
-            return <span class="badge text-bg-primary">PIX</span>
+            return <span className="badge text-bg-primary">PIX</span>
         }
 
         if (pagamentos == "cartao") {
-            return <span class="badge text-bg-warning">Crédito</span>
+            return <span className="badge text-bg-warning">Crédito</span>
         }
 
         if (pagamentos == "boleto") {
-            return <span class="badge text-bg-dark">Boleto</span>
+            return <span className="badge text-bg-dark">Boleto</span>
         }
 
         if (pagamentos == "dinheiro") {
-            return <span class="badge text-bg-success">Dinheiro</span>
+            return <span className="badge text-bg-success">Dinheiro</span>
         }
     }
 
@@ -76,6 +103,9 @@ function Vendas() {
 
     useEffect(() => {
         buscaTodos()
+        buscaUsuarios(
+        buscaLivros()
+        )
     }, [])
 
     return (
@@ -83,19 +113,27 @@ function Vendas() {
             <h1> Vendas </h1>
             <hr />
 
-            <form>
+            <form onSubmit={salvar}>
                 <p> Selecione o usuário </p>
-                <select onChange={e => alteraUsuario(e.target.value) } >
+                <select onChange={e => alteraUsuarios(e.target.value) } >
+                    <option> Selecione... </option>
                     {
-                        listaVendas.map(
-                            item => <option value={item.id_ussuario.id} > {item.id_ussuario.nome} </option>
+                        listaUsuarios.map(
+                            item => <option value={item.id} > {item.nome} </option>
                         )
                     }
                 </select>
                 <br/>
 
-                <p> DIgite o livro </p>
-                <input onChange={e => alteraLivro(e.target.value) } />
+                <p> Digite o livro </p>
+                <select onChange={e => alteraLivro(e.target.value) } >
+                    <option> Selecione... </option>
+                    {
+                        listaLivros.map(
+                            item => <option value={item.id} > {item.nome} </option>
+                        )
+                    }
+                </select>
                 <br/>
                 
                 <p> DIgite quantidade </p>
@@ -106,11 +144,11 @@ function Vendas() {
                 <input onChange={e => alteraPagamentos(e.target.value) } />
                 <br/>
 
-                <button onClick={salvar}> Salvar </button>
+                <button> Salvar </button>
             </form>
             
             <hr/>
-            <table className="table">
+            <table className="table table-hover">
                 <tr>
                     <td> # </td>
                     <td> Cliente </td>
@@ -118,21 +156,23 @@ function Vendas() {
                     <td> QNT. </td>
                     <td> Forma de Pagamento </td>
                     <td> Data </td>
+                    <td> Ações </td>
                 </tr>
 
 
                 {
                     listaVendas.length == 0 ?
                         <p> Carregando... </p>
-                        :
+                    :
                         listaVendas.map(
                             (item, index) => <tr>
-                                <td> {index+1} </td>
-                                <td> {item.id_ussuario.nome} </td>
-                                <td> {item.id_livro.nome} </td>
-                                <td> {item.quantidadis} </td>
-                                <td> {formataPagamentos(item.pagamentos)} </td>
-                                <td> {formataData(item.created_at)} às {formataHoras(item.created_at)} </td>
+                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {index+1} </td>
+                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {item.id_ussuario?.nome} </td>
+                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {item.id_livro?.nome} </td>
+                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {item.quantidadis} </td>
+                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {formataPagamentos(item.pagamentos)} </td>
+                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {formataData(item.created_at)} às {formataHoras(item.created_at)} </td>
+                                <td>  <button  onClick={ ()=> location.href = "/vendas/"+item.id } > 👁 </button> <button onClick={ ()=> excluir(item.id) } > 🗑 </button> </td>
                             </tr>
                         )
                 }
