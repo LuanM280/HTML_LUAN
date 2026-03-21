@@ -10,22 +10,29 @@ function Vendas() {
     const [listaUsuarios, alteraListaUsuarios] = useState([])
     const [listaLivros, alteraListaLivros] = useState([])
 
-    
-    const [id_ussuario,alteraUsuarios] = useState()
-    const [id_livro,alteraLivro] = useState()
-    const [quantidadis,alteraQuantidadis] = useState()
-    const [pagamentos,alteraPagamentos] = useState()
 
-    async function buscaLivros(){
-         const { data, error } = await supabase
+    const [id_ussuario, alteraUsuarios] = useState()
+    const [id_livro, alteraLivro] = useState()
+    const [quantidadis, alteraQuantidadis] = useState()
+    const [pagamentos, alteraPagamentos] = useState()
+    const [observacao, alteraObservacao] = useState()
+
+    const [inputPesquisaPagamento, alteraInputPesquisaPagamento] = useState()
+    const [inputPesquisaObservacao, alteraInputPesquisaObservacao] = useState()
+    const [inputPesquisaData, alteraInputPesquisaData] = useState()
+    const [inputPesquisaIdUsuario, alteraInputPesquisaIdUsuario] = useState()
+    const [inputPesquisaIdProduto, alteraInputPesquisaIdProduto] = useState()
+
+    async function buscaLivros() {
+        const { data, error } = await supabase
             .from('livros')
             .select()
 
         alteraListaLivros(data)
     }
 
-    async function buscaUsuarios(){
-         const { data, error } = await supabase
+    async function buscaUsuarios() {
+        const { data, error } = await supabase
             .from('usuarios')
             .select()
 
@@ -50,11 +57,11 @@ function Vendas() {
 
     async function excluir(id) {
         const opcao = confirm("Tem certe que deseja exluir?")
-        if(opcao == false){
+        if (opcao == false) {
             return
         }
 
-        const response = await supabase.from('vendas').delete().eq('id',id)
+        const response = await supabase.from('vendas').delete().eq('id', id)
     }
 
     function formataData(data) {
@@ -94,17 +101,69 @@ function Vendas() {
             id_ussuario: id_ussuario,
             id_livro: id_livro,
             quantidadis: quantidadis,
-            pagamentos: pagamentos
+            pagamentos: pagamentos,
+            observacao: observacao
         }
 
-        const {error} = await supabase.from('vendas').insert(objeto)
+        const { error } = await supabase.from('vendas').insert(objeto)
         console.log(error)
+    }
+
+    // Funções de Pesquisa
+    async function pesquisaPagamento() {
+        const { data, error } = await supabase
+            .from('vendas')
+            .select('*, id_ussuario(*), id_livro(*)')
+            .ilike('pagamentos', '%' + inputPesquisaPagamento + '%')
+
+        alteraListaVendas(data)
+    }
+    async function pesquisaObsevacao() {
+        const { data, error } = await supabase
+            .from('vendas')
+            .select('*, id_ussuario(*), id_livro(*)')
+            .ilike('observacao', '%' + inputPesquisaObservacao + '%')
+
+    alteraListaVendas(data)
+    }
+    async function pesquisaData() {
+        const { data, error } = await supabase
+            .from('vendas')
+            .select('*, id_ussuario(*), id_livro(*)')
+            .gt('created_at', inputPesquisaData + " 00:00:00+00")
+            .lt('created_at', inputPesquisaData + " 23:59:00+00")
+
+        alteraListaVendas(data)
+    }
+    async function pesquisaUsuario() {
+
+    }
+    async function pesquisaProduto() {
+
+    }
+    async function pesquisaMaiorVendas() {
+        const { data, error } = await supabase
+            .from('vendas')
+            .select('*, id_ussuario(*), id_livro(*)')
+            .limit(3)
+            .order('quantidadis', { ascending: false })
+
+        alteraListaVendas(data)
+    }
+    async function pesquisaHoje() {
+        const { data, error } = await supabase
+            .from('vendas')
+            .select('*, id_ussuario(*), id_livro(*)')
+            .gt('created_at', new Date().toISOString().split("T")[0]  + " 00:00:00+00")
+            .lt('created_at', new Date().toISOString().split("T")[0]  + " 23:59:00+00")
+
+        alteraListaVendas(data)
     }
 
     useEffect(() => {
         buscaTodos()
         buscaUsuarios(
-        buscaLivros()
+            buscaLivros()
         )
     }, [])
 
@@ -115,7 +174,7 @@ function Vendas() {
 
             <form onSubmit={salvar}>
                 <p> Selecione o usuário </p>
-                <select onChange={e => alteraUsuarios(e.target.value) } >
+                <select onChange={e => alteraUsuarios(e.target.value)} >
                     <option> Selecione... </option>
                     {
                         listaUsuarios.map(
@@ -123,10 +182,10 @@ function Vendas() {
                         )
                     }
                 </select>
-                <br/>
+                <br />
 
                 <p> Digite o livro </p>
-                <select onChange={e => alteraLivro(e.target.value) } >
+                <select onChange={e => alteraLivro(e.target.value)} >
                     <option> Selecione... </option>
                     {
                         listaLivros.map(
@@ -134,20 +193,34 @@ function Vendas() {
                         )
                     }
                 </select>
-                <br/>
-                
+                <br />
+
                 <p> DIgite quantidade </p>
-                <input onChange={e => alteraQuantidadis(e.target.value) } />
-                <br/>
+                <input onChange={e => alteraQuantidadis(e.target.value)} />
+                <br />
 
                 <p> Forma de Pagamento </p>
-                <input onChange={e => alteraPagamentos(e.target.value) } />
-                <br/>
+                <input onChange={e => alteraPagamentos(e.target.value)} />
+                <br />
+
+                <p> Forma de Observação </p>
+                <input onChange={e => alteraObservacao(e.target.value)} />
+                <br />
 
                 <button> Salvar </button>
             </form>
-            
-            <hr/>
+
+            <hr />
+            <h2> Filtros </h2>
+            <p> Pesquisar Pagamentos <input onChange={e => alteraInputPesquisaPagamento(e.target.value)} /> <button onClick={pesquisaPagamento} > Pesquisar </button> </p>
+            <p> Pesquisar Observações <input onChange={e => alteraInputPesquisaObservacao(e.target.value)} /> <button onClick={pesquisaObsevacao} > Pesquisar </button> </p>
+            <p> Pesquisar Data <input type="date" onChange={e => alteraInputPesquisaData(e.target.value)} /> <button onClick={pesquisaData} > Pesquisar </button> </p>
+            <p> Pesquisar pelo ID do Usuário <input onChange={e => alteraInputPesquisaIdUsuario(e.target.value)} /> <button onClick={pesquisaUsuario} > Pesquisar </button> </p>
+            <p> Pesquisar pelo ID do Produto <input onChange={e => alteraInputPesquisaIdProduto(e.target.value)} /> <button onClick={pesquisaProduto} > Pesquisar </button> </p>
+            <p> Filtrar po maiores vendas <button onClick={pesquisaMaiorVendas} > Pesquisar </button> </p>
+            <p> Ver vendas de hoje <button onClick={pesquisaHoje} > Pesquisar </button> </p>
+            <hr />
+
             <table className="table table-hover">
                 <tr>
                     <td> # </td>
@@ -155,6 +228,7 @@ function Vendas() {
                     <td> Produto </td>
                     <td> QNT. </td>
                     <td> Forma de Pagamento </td>
+                    <td> Observações </td>
                     <td> Data </td>
                     <td> Ações </td>
                 </tr>
@@ -163,16 +237,17 @@ function Vendas() {
                 {
                     listaVendas.length == 0 ?
                         <p> Carregando... </p>
-                    :
+                        :
                         listaVendas.map(
                             (item, index) => <tr>
-                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {index+1} </td>
-                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {item.id_ussuario?.nome} </td>
-                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {item.id_livro?.nome} </td>
-                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {item.quantidadis} </td>
-                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {formataPagamentos(item.pagamentos)} </td>
-                                <td  onClick={ ()=> location.href = "/vendas/"+item.id } > {formataData(item.created_at)} às {formataHoras(item.created_at)} </td>
-                                <td>  <button  onClick={ ()=> location.href = "/vendas/"+item.id } > 👁 </button> <button onClick={ ()=> excluir(item.id) } > 🗑 </button> </td>
+                                <td onClick={() => location.href = "/vendas/" + item.id} > {index + 1} </td>
+                                <td onClick={() => location.href = "/vendas/" + item.id} > {item.id_ussuario?.nome} </td>
+                                <td onClick={() => location.href = "/vendas/" + item.id} > {item.id_livro?.nome} </td>
+                                <td onClick={() => location.href = "/vendas/" + item.id} > {item.quantidadis} </td>
+                                <td onClick={() => location.href = "/vendas/" + item.id} > {formataPagamentos(item.pagamentos)} </td>
+                                <td> {item.observacao} </td>
+                                <td onClick={() => location.href = "/vendas/" + item.id} > {formataData(item.created_at)} às {formataHoras(item.created_at)} </td>
+                                <td>  <button onClick={() => location.href = "/vendas/" + item.id} > 👁 </button> <button onClick={() => excluir(item.id)} > 🗑 </button> </td>
                             </tr>
                         )
                 }
