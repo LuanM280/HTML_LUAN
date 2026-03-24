@@ -10,6 +10,7 @@ function Vendas() {
     const [listaUsuarios, alteraListaUsuarios] = useState([])
     const [listaLivros, alteraListaLivros] = useState([])
 
+    const [editando, alteraEditando] = useState(false)
 
     const [id_ussuario, alteraUsuarios] = useState()
     const [id_livro, alteraLivro] = useState()
@@ -64,6 +65,48 @@ function Vendas() {
         const response = await supabase.from('vendas').delete().eq('id', id)
     }
 
+    function editar(objeto) {
+
+        alteraQuantidadis(objeto.quantidadis)
+        alteraPagamentos(objeto.pagamentos)
+        alteraObservacao(objeto.observacao)
+
+        alteraEditando(objeto.id)
+
+    }
+
+    function cancelaEdicao() {
+
+        alteraQuantidadis("")
+        alteraPagamentos("")
+        alteraObservacao("")
+
+        alteraEditando(null)
+
+    }
+
+    async function atualizar() {
+
+        const objeto = {
+            quantidadis: quantidadis,
+            pagamentos: pagamentos,
+            observacao: observacao
+        }
+
+        const { error } = await supabase
+            .from('vendas')
+            .update(objeto)
+            .eq('id', editando)
+
+            if(error == null){
+                alert("Atulalizado com sucesso!")
+                cancelaEdicao()
+                buscaTodos()
+            }else{
+                alert("Dados inválidos! Verifique os campos e tente novamento...")
+            }
+    }
+
     function formataData(data) {
         let data_formatada = new Date(data)
         data_formatada = data_formatada.toLocaleDateString()
@@ -107,6 +150,8 @@ function Vendas() {
 
         const { error } = await supabase.from('vendas').insert(objeto)
         console.log(error)
+
+        buscaTodos()
     }
 
     // Funções de Pesquisa
@@ -124,7 +169,7 @@ function Vendas() {
             .select('*, id_ussuario(*), id_livro(*)')
             .ilike('observacao', '%' + inputPesquisaObservacao + '%')
 
-    alteraListaVendas(data)
+        alteraListaVendas(data)
     }
     async function pesquisaData() {
         const { data, error } = await supabase
@@ -154,8 +199,8 @@ function Vendas() {
         const { data, error } = await supabase
             .from('vendas')
             .select('*, id_ussuario(*), id_livro(*)')
-            .gt('created_at', new Date().toISOString().split("T")[0]  + " 00:00:00+00")
-            .lt('created_at', new Date().toISOString().split("T")[0]  + " 23:59:00+00")
+            .gt('created_at', new Date().toISOString().split("T")[0] + " 00:00:00+00")
+            .lt('created_at', new Date().toISOString().split("T")[0] + " 23:59:00+00")
 
         alteraListaVendas(data)
     }
@@ -169,12 +214,18 @@ function Vendas() {
 
     return (
         <div>
+
+            {/* https://wa.me/5574646468 */}
+            <a href="https://api.whatsapp.com/phone=5546465151&text=Olá Vim pelo site e gostaria de saber sobre o produto X " >
+                <img className="zipzop" src="https://store-images.s-microsoft.com/image/apps.8453.13655054093851568.4a371b72-2ce8-4bdb-9d83-be49894d3fa0.7f3687b9-847d-4f86-bb5c-c73259e2b38e" />
+            </a>
+
             <h1> Vendas </h1>
             <hr />
 
             <form onSubmit={salvar}>
                 <p> Selecione o usuário </p>
-                <select onChange={e => alteraUsuarios(e.target.value)} >
+                <select disabled={editando != null} onChange={e => alteraUsuarios(e.target.value)} >
                     <option> Selecione... </option>
                     {
                         listaUsuarios.map(
@@ -185,7 +236,7 @@ function Vendas() {
                 <br />
 
                 <p> Digite o livro </p>
-                <select onChange={e => alteraLivro(e.target.value)} >
+                <select disabled={editando != null} onChange={e => alteraLivro(e.target.value)} >
                     <option> Selecione... </option>
                     {
                         listaLivros.map(
@@ -195,19 +246,29 @@ function Vendas() {
                 </select>
                 <br />
 
-                <p> DIgite quantidade </p>
-                <input onChange={e => alteraQuantidadis(e.target.value)} />
+                <p> Digite quantidade </p>
+                <input value={quantidadis} onChange={e => alteraQuantidadis(e.target.value)} />
                 <br />
 
                 <p> Forma de Pagamento </p>
-                <input onChange={e => alteraPagamentos(e.target.value)} />
+                <input value={pagamentos} onChange={e => alteraPagamentos(e.target.value)} />
                 <br />
 
                 <p> Forma de Observação </p>
-                <input onChange={e => alteraObservacao(e.target.value)} />
+                <input value={observacao} onChange={e => alteraObservacao(e.target.value)} />
                 <br />
 
-                <button> Salvar </button>
+                {
+                    editando != null ?
+                        <div>
+                            <button onClick={() => atualizar()} > Atualizar </button>
+                            <button onClick={() => cancelaEdicao()} > Cancelar </button>
+                        </div>
+                        :
+                        <button> Salvar </button>
+
+                }
+
             </form>
 
             <hr />
@@ -248,6 +309,7 @@ function Vendas() {
                                 <td> {item.observacao} </td>
                                 <td onClick={() => location.href = "/vendas/" + item.id} > {formataData(item.created_at)} às {formataHoras(item.created_at)} </td>
                                 <td>  <button onClick={() => location.href = "/vendas/" + item.id} > 👁 </button> <button onClick={() => excluir(item.id)} > 🗑 </button> </td>
+                                <td>  <button onClick={() => editar(item)} > Editar </button> </td>
                             </tr>
                         )
                 }

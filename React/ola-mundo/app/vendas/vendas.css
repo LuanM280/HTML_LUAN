@@ -6,3 +6,10 @@ table tr:hover{
     background-color: rgb(185, 184, 184);
     cursor: pointer;
 }
+
+.zipzop{
+    width: 80px;
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+}
